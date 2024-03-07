@@ -1,7 +1,11 @@
-﻿using AutoMapper;
+﻿using System.Net;
+using AutoMapper;
+using GamesGlobal.Core.Exceptions;
 using GamesGlobal.Core.Repositories;
 using GamesGlobal.Dal.Entities;
 using GamesGlobal.Shared.Models;
+using GamesGlobal.Shared.Models.RequestModels;
+using Microsoft.AspNetCore.Http;
 
 namespace GamesGlobal.Core.Managers;
 
@@ -15,6 +19,8 @@ public class GamesManager : IGamesManager
         _gamesRepository = gamesRepository;
         _mapper = mapper;
     }
+    
+    #region Implementation of IGamesManager
 
     public async Task<List<Game>> GetAllGames()
     {
@@ -23,10 +29,33 @@ public class GamesManager : IGamesManager
         return games.Select(x => _mapper.Map<Game>(x)).ToList();
     }
 
-    public async Task Insert(Game game)
+    public async Task CreateGame(CreateGameRequest gameRequest)
     {
-        var entity = _mapper.Map<GameEntity>(game);
+        var imageFile = gameRequest.Image;
+        var imageData = ConvertStreamToByteArray(imageFile);
 
+        var entity = _mapper.Map<GameEntity>(gameRequest);
+        entity.Image = imageData;
+        
         await _gamesRepository.Insert(entity);
+    }
+    
+    #endregion
+    
+    private byte[] ConvertStreamToByteArray(IFormFile file)
+    {
+        using var ms = new MemoryStream();
+        file.CopyTo(ms);
+        var fileBytes = ms.ToArray();
+
+        return fileBytes;
+    }
+
+    private void ValidateFileIsImage(IFormFile file)
+    {
+        if (file.ContentType == null || !file.ContentType.StartsWith("image/"))
+        {
+            throw new ApiObjectException("Invalid image", HttpStatusCode.BadRequest);
+        }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using GamesGlobal.Shared.Models;
+using GamesGlobal.Shared.Models.RequestModels;
 
 namespace GamesGlobal.Core.Managers;
 
 public interface IGamesManager
 {
     Task<List<Game>> GetAllGames();
-    Task Insert(Game game);
+    Task CreateGame(CreateGameRequest gameRequest);
 }

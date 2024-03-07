@@ -11,6 +11,5 @@ public class GameEntity : BaseEntity
     public int Rating { get; set; }
     public byte[] Image { get; set; }
     public string Genre { get; set; }
-    public DateTime ReleaseDate { get; set; }
     public double Price { get; set; }
 }

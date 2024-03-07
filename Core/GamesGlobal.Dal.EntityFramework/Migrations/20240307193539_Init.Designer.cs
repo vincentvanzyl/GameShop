@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GamesGlobal.Dal.EntityFramework.Migrations
 {
     [DbContext(typeof(GamesGlobalContext))]
-    [Migration("20240307104631_Init")]
+    [Migration("20240307193539_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -91,9 +91,6 @@ namespace GamesGlobal.Dal.EntityFramework.Migrations
 
                     b.Property<int>("Rating")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("ReleaseDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
                         .IsRequired()
