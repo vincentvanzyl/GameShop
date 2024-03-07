@@ -23,10 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
-    </ItemGroup>
-
-    <ItemGroup>
+      <ProjectReference Include="..\Common\GamesGlobal.Shared\GamesGlobal.Shared.csproj" />
       <ProjectReference Include="..\Core\GamesGlobal.Core\GamesGlobal.Core.csproj" />
     </ItemGroup>
 

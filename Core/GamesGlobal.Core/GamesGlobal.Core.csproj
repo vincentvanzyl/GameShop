@@ -7,10 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="13.0.1" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Common\GamesGlobal.Shared\GamesGlobal.Shared.csproj" />
       <ProjectReference Include="..\..\Common\GamesGlobal.Utilities\GamesGlobal.Utilities.csproj" />
       <ProjectReference Include="..\GamesGlobal.Dal.EntityFramework\GamesGlobal.Dal.EntityFramework.csproj" />
       <ProjectReference Include="..\GamesGlobal.Dal\GamesGlobal.Dal.csproj" />

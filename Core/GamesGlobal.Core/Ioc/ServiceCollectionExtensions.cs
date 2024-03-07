@@ -1,4 +1,6 @@
-﻿using GamesGlobal.Core.Repositories;
+﻿using GamesGlobal.Core.Managers;
+using GamesGlobal.Core.Mappers.Profiles;
+using GamesGlobal.Core.Repositories;
 using GamesGlobal.Dal.EntityFramework;
 using GamesGlobal.Dal.EntityFramework.Persistence;
 using GamesGlobal.Dal.Persistence;
@@ -16,8 +18,14 @@ public static class ServiceCollectionExtensions
         AddAutoMapper(services);
         AddDatabase(services);
         AddRepositories(services);
+        AddManagers(services);
     }
-    
+
+    private static void AddManagers(IServiceCollection services)
+    {
+        services.AddScoped<IGamesManager, GamesManager>();
+    }
+
     private static void AddCoreConfiguration(IServiceCollection services)
     {
         services.AddSingleton<IGamesGlobalSettings, GamesGlobalSettings>();
@@ -25,12 +33,15 @@ public static class ServiceCollectionExtensions
 
     private static void AddRepositories(IServiceCollection services)
     {
-        services.AddSingleton<IGamesRepository, GamesRepository>();
+        services.AddScoped<IGamesRepository, GamesRepository>();
     }
 
     private static void AddAutoMapper(IServiceCollection services)
     {
-        
+        services.AddAutoMapper(cfg =>
+        {
+            cfg.AddProfile<GamesMapProfile>();
+        });
     }
     
     private static void AddDatabase(IServiceCollection services)

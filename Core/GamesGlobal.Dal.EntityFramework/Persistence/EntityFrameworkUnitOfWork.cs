@@ -15,6 +15,7 @@ public class EntityFrameworkUnitOfWork : IGeneralUnitOfWork
         _dbContext = dbContext;
 
         Games = new EntityFrameworkRepository<GameEntity>(dbContext, dbContext.Games);
+        Users = new EntityFrameworkRepository<UserEntity>(dbContext, dbContext.Users);
     }
 
     public void Dispose()
