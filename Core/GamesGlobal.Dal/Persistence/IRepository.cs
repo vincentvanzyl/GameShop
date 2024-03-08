@@ -7,6 +7,7 @@ public interface IRepository<T> where T : BaseEntity
 {
     Task<T?> GetById(long id);
     Task<IEnumerable<T>> Get(Expression<Func<T, bool>> expression);
+    Task<T?> GetOne(Expression<Func<T, bool>> expression);
     IQueryable<T> GetQueryable(Expression<Func<T, bool>> expression);
     Task<T> Insert(T entity);
     Task<T> Update(T entity);

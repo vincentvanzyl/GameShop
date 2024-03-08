@@ -18,6 +18,8 @@ public abstract class BaseRepository<T> where T : BaseEntity
     public virtual Task<IEnumerable<T>> Get(Expression<Func<T, bool>> expression) => 
         Repository.Get(expression);
 
+    public virtual Task<T?> GetOne(Expression<Func<T, bool>> expression) => Repository.GetOne(expression);
+
     public virtual Task<T?> GetById(long id) => Repository.GetById(id);
 
     public virtual Task<T> Insert(T entity) => Repository.Insert(entity);

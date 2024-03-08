@@ -34,6 +34,8 @@ public static class ServiceCollectionExtensions
     private static void AddRepositories(IServiceCollection services)
     {
         services.AddScoped<IGamesRepository, GamesRepository>();
+        services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
+        services.AddScoped<IShoppingCartItemRepository, ShoppingCartItemRepository>();
     }
 
     private static void AddAutoMapper(IServiceCollection services)

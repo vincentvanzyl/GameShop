@@ -21,6 +21,9 @@ public class EntityFrameworkRepository<T> : IRepository<T> where T : BaseEntity
     public async Task<IEnumerable<T>> Get(Expression<Func<T, bool>> expression) =>
         await _dbSet.Where(expression).ToListAsync();
 
+    public async Task<T?> GetOne(Expression<Func<T, bool>> expression) =>
+        await _dbSet.FirstOrDefaultAsync(expression);
+
     public IQueryable<T> GetQueryable(Expression<Func<T, bool>> expression) =>
         _dbSet.Where(expression);
 
