@@ -10,5 +10,5 @@ public class CreateGameRequest
     public string Genre { get; set; }
     public int Rating { get; set; }
     public double Price { get; set; }
-    public new IFormFile Image { get; set; }
+    public IFormFile Image { get; set; }
 }

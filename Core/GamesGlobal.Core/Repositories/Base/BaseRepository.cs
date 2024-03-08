@@ -20,16 +20,16 @@ public abstract class BaseRepository<T> where T : BaseEntity
 
     public virtual Task<T?> GetById(long id) => Repository.GetById(id);
 
-    public virtual Task Insert(T entity) => Repository.Insert(entity);
+    public virtual Task<T> Insert(T entity) => Repository.Insert(entity);
 
-    public virtual Task Update(T entity) => Repository.Update(entity);
+    public virtual Task<T> Update(T entity) => Repository.Update(entity);
 
-    public virtual async Task Upsert(T entity)
+    public virtual async Task<T> Upsert(T entity)
     {
         var foundEntity = await GetById(entity.Id);
         if (foundEntity == null)
-            await Insert(entity);
-        await Update(entity);
+            return await Insert(entity);
+        return await Update(entity);
     }
 
     public virtual Task Delete(long id) => Repository.Delete(id);

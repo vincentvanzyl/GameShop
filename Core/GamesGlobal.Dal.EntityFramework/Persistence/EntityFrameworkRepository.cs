@@ -24,20 +24,24 @@ public class EntityFrameworkRepository<T> : IRepository<T> where T : BaseEntity
     public IQueryable<T> GetQueryable(Expression<Func<T, bool>> expression) =>
         _dbSet.Where(expression);
 
-    public async Task Insert(T entity)
+    public async Task<T> Insert(T entity)
     {
         entity.CreatedAt = DateTime.Now;
         
         await _dbSet.AddAsync(entity);
         await _dbContext.SaveChangesAsync();
+
+        return entity;
     }
 
-    public async Task Update(T entity)
+    public async Task<T> Update(T entity)
     {
         entity.LastUpdatedAt = DateTime.Now;
         
         _dbSet.Update(entity);
         await _dbContext.SaveChangesAsync();
+
+        return entity;
     }
 
     public async Task Delete(long id)

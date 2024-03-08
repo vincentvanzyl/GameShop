@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using GamesGlobal.Dal.Entities.Base;
 
@@ -12,6 +13,8 @@ public class UserEntity : BaseEntity
     
     [MaxLength(200)]
     public string EmailAddress { get; set; }
+    
+    public int Role { get; set; }
     
     public string OAuthProvider { get; set; }
     public string OAuthId { get; set; }

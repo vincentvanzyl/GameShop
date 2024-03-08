@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using GamesGlobal.Utilities.Config.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace GamesGlobal.Utilities.Config;
 
@@ -28,6 +29,11 @@ public class GamesGlobalSettings : IGamesGlobalSettings
     public static GamesGlobalSettings Instance => _instance.Value;
 
     public string ConnectionString => _configuration.GetConnectionString("GameShopDb") ?? string.Empty;
+
+    public SecuritySettings Security => new()
+    {
+        StrongKey = _configuration["Security:StrongKey"]
+    };
 
     #endregion
 }

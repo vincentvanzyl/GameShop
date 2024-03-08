@@ -32,14 +32,17 @@ public class GamesManager : IGamesManager
     public async Task CreateGame(CreateGameRequest gameRequest)
     {
         var imageFile = gameRequest.Image;
-        var imageData = ConvertStreamToByteArray(imageFile);
+        
+        ValidateFileIsImage(imageFile);
 
         var entity = _mapper.Map<GameEntity>(gameRequest);
-        entity.Image = imageData;
+        entity.Image = ConvertStreamToByteArray(imageFile);;
         
         await _gamesRepository.Insert(entity);
     }
-    
+
+    public Task Delete(long id) => _gamesRepository.Delete(id);
+
     #endregion
     
     private byte[] ConvertStreamToByteArray(IFormFile file)

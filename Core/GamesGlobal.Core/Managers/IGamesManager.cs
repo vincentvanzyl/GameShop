@@ -7,4 +7,5 @@ public interface IGamesManager
 {
     Task<List<Game>> GetAllGames();
     Task CreateGame(CreateGameRequest gameRequest);
+    Task Delete(long id);
 }
