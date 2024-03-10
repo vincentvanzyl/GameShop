@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace GamesGlobal.Core.Ioc;
 
-public static class ServiceCollectionExtensions
+public static class IocCoreBase
 {
     public static void AddCoreServices(this IServiceCollection services)
     {
@@ -24,6 +24,10 @@ public static class ServiceCollectionExtensions
     private static void AddManagers(IServiceCollection services)
     {
         services.AddScoped<IGamesManager, GamesManager>();
+        services.AddScoped<IShoppingCartManager, ShoppingCartManager>();
+        services.AddScoped<IUserManager, UserManager>();
+        services.AddScoped<IShoppingCartManager, ShoppingCartManager>();
+        services.AddScoped<IAccessTokenManager, AccessTokenManager>();
     }
 
     private static void AddCoreConfiguration(IServiceCollection services)
@@ -36,6 +40,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGamesRepository, GamesRepository>();
         services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
         services.AddScoped<IShoppingCartItemRepository, ShoppingCartItemRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
     }
 
     private static void AddAutoMapper(IServiceCollection services)
@@ -43,6 +48,7 @@ public static class ServiceCollectionExtensions
         services.AddAutoMapper(cfg =>
         {
             cfg.AddProfile<GamesMapProfile>();
+            cfg.AddProfile<ShoppingCartProfile>();
         });
     }
     

@@ -11,14 +11,16 @@ public class UserEntity : BaseEntity
     [MaxLength(100)]
     public string Name { get; set; }
     
-    [MaxLength(200)]
     public string EmailAddress { get; set; }
+    public string Password { get; set; }
     
     public int Role { get; set; }
     
     public string OAuthProvider { get; set; }
     public string OAuthId { get; set; }
-    
+    public string RefreshToken { get; set; }
+    public Guid TokeGuid { get; set; }
+
     public virtual ICollection<ShoppingCartEntity> ShoppingCarts { get; set; }
     public virtual ICollection<OrderEntity> Orders { get; set; }
 }

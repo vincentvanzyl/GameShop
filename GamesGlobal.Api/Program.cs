@@ -1,3 +1,4 @@
+using System.Text;
 using GamesGlobal.Api.Attributes;
 using GamesGlobal.Core.Ioc;
 using GamesGlobal.Dal.EntityFramework;
@@ -22,24 +23,24 @@ builder.Services.AddControllers(options =>
 builder.Services.AddCoreServices();
 GamesGlobalSettings.SetInstance(builder.Configuration);
 
-builder.Services.AddAuthentication(options =>
+string securityKey = GamesGlobalSettings.Instance.Security.StrongKey; // Should be in config
+var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(opt =>
     {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(options =>
-    {
-        options.Authority = "https://dev-50730829.okta.com/oauth2/default";
-        options.Audience = "api://default";
-        options.TokenValidationParameters = new TokenValidationParameters
+        opt.TokenValidationParameters = new TokenValidationParameters
         {
+            //What to validate
             ValidateIssuer = true,
             ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true
+            ValidateIssuerSigningKey = true,
+            //Setup validation data
+            ValidIssuer = "GamesGlobal",
+            ValidAudience = "readers",
+            IssuerSigningKey = symmetricSecurityKey
         };
     });
-
 builder.Services.AddAuthorization();
 
 var app = builder.Build();

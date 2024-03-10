@@ -19,7 +19,7 @@ public class ShoppingCartManager : IShoppingCartManager
 
     public async Task<ShoppingCart> Get(long userId)
     {
-        var entity = await _shoppingCartRepository.Upsert(new ShoppingCartEntity
+        var entity = await _shoppingCartRepository.GetByUserId(userId) ?? await _shoppingCartRepository.Insert(new ShoppingCartEntity
         {
             UserId = userId
         });

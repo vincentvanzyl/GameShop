@@ -5,5 +5,5 @@ namespace GamesGlobal.Core.Repositories;
 
 public interface IUserRepository : IReadWriteRepository<UserEntity>
 {
-    
+    Task<UserEntity?> GetByEmail(string emailAddress);
 }

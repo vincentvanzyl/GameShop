@@ -30,6 +30,7 @@ public class EntityFrameworkRepository<T> : IRepository<T> where T : BaseEntity
     public async Task<T> Insert(T entity)
     {
         entity.CreatedAt = DateTime.Now;
+        entity.LastUpdatedAt = DateTime.Now;
         
         await _dbSet.AddAsync(entity);
         await _dbContext.SaveChangesAsync();

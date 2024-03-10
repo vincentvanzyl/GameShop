@@ -32,7 +32,8 @@ public class GamesGlobalSettings : IGamesGlobalSettings
 
     public SecuritySettings Security => new()
     {
-        StrongKey = _configuration["Security:StrongKey"]
+        StrongKey = _configuration["Security:StrongKey"],
+        SearchSalt = _configuration["Security:SearchSalt"]
     };
 
     #endregion
