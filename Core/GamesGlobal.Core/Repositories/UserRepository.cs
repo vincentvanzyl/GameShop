@@ -13,10 +13,10 @@ public class UserRepository : BaseRepository<UserEntity>, IUserRepository
 
     protected override IRepository<UserEntity> Repository => _generalUnitOfWork.Users;
 
-    public Task<UserEntity?> GetByEmail(string emailAddress)
+    public async Task<UserEntity?> GetByEmail(string emailAddress)
     {
-        var encryptedEmailAddress = emailAddress.Encrypt();
-        return Repository.GetOne(x => x.EmailAddress == encryptedEmailAddress);
+        var searchHash = emailAddress.HashSearchable();
+        return await Repository.GetOne(x => x.EmailSearchHash == searchHash);
     }
     
 }

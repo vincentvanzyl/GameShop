@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GamesGlobal.Dal.EntityFramework.Migrations
 {
     [DbContext(typeof(GamesGlobalContext))]
-    [Migration("20240307193539_Init")]
+    [Migration("20240310165653_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -200,8 +200,11 @@ namespace GamesGlobal.Dal.EntityFramework.Migrations
 
                     b.Property<string>("EmailAddress")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmailSearchHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastUpdatedAt")
                         .HasColumnType("datetime2");
@@ -218,6 +221,20 @@ namespace GamesGlobal.Dal.EntityFramework.Migrations
                     b.Property<string>("OAuthProvider")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TokenGuid")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 

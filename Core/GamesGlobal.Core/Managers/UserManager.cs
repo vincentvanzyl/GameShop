@@ -6,7 +6,6 @@ using GamesGlobal.Shared.Enums;
 using GamesGlobal.Shared.Extensions;
 using GamesGlobal.Shared.Models.RequestModels;
 using GamesGlobal.Shared.Models.ResponseModels;
-using GamesGlobal.Utilities.Config;
 
 namespace GamesGlobal.Core.Managers;
 
@@ -20,17 +19,18 @@ public class UserManager(IUserRepository userRepository, IAccessTokenManager acc
         var newUser = await userRepository.Insert(new UserEntity
         {
             EmailAddress = registerUserRequest.EmailAddress.Encrypt()!,
-            Name = registerUserRequest.Name,
+            EmailSearchHash = registerUserRequest.EmailAddress.HashSearchable()!,
+            Name = registerUserRequest.Name.Encrypt()!,
             Password = registerUserRequest.Password.Hash(tokenGuid)!,
             OAuthProvider = "JWT",
             OAuthId = "",
             RefreshToken = "",
-            TokeGuid = tokenGuid,
+            TokenGuid = tokenGuid,
             Role = (int)Roles.User
         });
 
         var token = accessTokenManager.GenerateToken(newUser);
-        var refreshToken = accessTokenManager.GenerateToken(newUser);
+        var refreshToken = accessTokenManager.GenerateRefreshToken();
 
         newUser.OAuthId = token;
         newUser.RefreshToken = refreshToken;
@@ -50,7 +50,7 @@ public class UserManager(IUserRepository userRepository, IAccessTokenManager acc
         if (existingUser == null)
             throw new ApiObjectException("Invalid username or password", HttpStatusCode.NotFound);
 
-        var passwordHash = loginRequest.Password.Hash(existingUser.TokeGuid);
+        var passwordHash = loginRequest.Password.Hash(existingUser.TokenGuid);
         if (passwordHash != existingUser.Password)
             throw new ApiObjectException("Invalid username or password", HttpStatusCode.NotFound);
         
