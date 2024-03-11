@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GamesGlobal.Dal.EntityFramework.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,7 +48,6 @@ namespace GamesGlobal.Dal.EntityFramework.Migrations
                     Role = table.Column<int>(type: "int", nullable: false),
                     OAuthProvider = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OAuthId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TokenGuid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     EmailSearchHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
