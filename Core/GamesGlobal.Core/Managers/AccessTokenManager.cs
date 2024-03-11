@@ -10,6 +10,10 @@ namespace GamesGlobal.Core.Managers;
 
 public class AccessTokenManager(IGamesGlobalSettings settings) : IAccessTokenManager
 {
+    public static readonly string CLAIM_TYPE_TOKEN_ID = "TokenId";
+    public static readonly string CLAIM_TYPE_CLIENT_ID = "ClientId";
+    public static readonly string CLAIM_TYPE_IDENTIFIER = "Identifier";
+    
     public string GenerateRefreshToken(int size = 32)
     {
         var randomNumber = new byte[size];
@@ -41,7 +45,7 @@ public class AccessTokenManager(IGamesGlobalSettings settings) : IAccessTokenMan
 
         //Create token
         var token = new JwtSecurityToken(
-            issuer: "22seven",
+            issuer: "GamesGlobal",
             audience: "readers",
             expires: expiryDate,
             signingCredentials: signingCredentials,

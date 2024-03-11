@@ -18,7 +18,6 @@ public class UserEntity : BaseEntity
     
     public string OAuthProvider { get; set; }
     public string OAuthId { get; set; }
-    public string RefreshToken { get; set; }
     public Guid TokenGuid { get; set; }
     public string EmailSearchHash { get; set; }
 

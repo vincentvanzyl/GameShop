@@ -10,10 +10,14 @@ public class ShoppingCartProfile : Profile
     {
         CreateMap<ShoppingCartEntity, ShoppingCart>()
             .ForMember(m => m.CartItems, opt => opt
-                .MapFrom(x => x.CartItems));
+                .MapFrom(x => x.CartItems.ToList()));
 
         CreateMap<CartItemEntity, CartItem>()
             .ForMember(m => m.Game, opts => 
                 opts.MapFrom(x => x.Game));
+
+        CreateMap<CartItem, CartItemEntity>()
+            .ForMember(m => m.Game, opt => opt.Ignore())
+            .ForMember(m => m.ShoppingCart, opt => opt.Ignore());
     }
 }

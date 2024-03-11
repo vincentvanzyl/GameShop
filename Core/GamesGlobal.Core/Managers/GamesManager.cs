@@ -29,6 +29,12 @@ public class GamesManager : IGamesManager
         return games.Select(x => _mapper.Map<Game>(x)).ToList();
     }
 
+    public async Task<Game?> GetById(long id)
+    {
+        var entity = await _gamesRepository.GetById(id);
+        return _mapper.Map<Game>(entity);
+    }
+
     public async Task CreateGame(CreateGameRequest gameRequest)
     {
         var imageFile = gameRequest.Image;

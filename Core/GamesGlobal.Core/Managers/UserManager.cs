@@ -4,6 +4,7 @@ using GamesGlobal.Core.Repositories;
 using GamesGlobal.Dal.Entities;
 using GamesGlobal.Shared.Enums;
 using GamesGlobal.Shared.Extensions;
+using GamesGlobal.Shared.Models;
 using GamesGlobal.Shared.Models.RequestModels;
 using GamesGlobal.Shared.Models.ResponseModels;
 
@@ -24,22 +25,15 @@ public class UserManager(IUserRepository userRepository, IAccessTokenManager acc
             Password = registerUserRequest.Password.Hash(tokenGuid)!,
             OAuthProvider = "JWT",
             OAuthId = "",
-            RefreshToken = "",
             TokenGuid = tokenGuid,
             Role = (int)Roles.User
         });
 
         var token = accessTokenManager.GenerateToken(newUser);
-        var refreshToken = accessTokenManager.GenerateRefreshToken();
-
-        newUser.OAuthId = token;
-        newUser.RefreshToken = refreshToken;
-        await userRepository.Update(newUser);
 
         return new Auth
         {
-            AuthToken = token,
-            RefreshToken = refreshToken
+            AuthToken = token
         };
     }
 
@@ -57,12 +51,27 @@ public class UserManager(IUserRepository userRepository, IAccessTokenManager acc
         if (existingUser.OAuthProvider != "JWT")
             throw new ApiObjectException("Invalid auth type", HttpStatusCode.UnprocessableEntity);
 
+        var token = accessTokenManager.GenerateToken(existingUser);
+        
         return new Auth
         {
-            AuthToken = existingUser.OAuthId,
-            RefreshToken = existingUser.RefreshToken
+            AuthToken = token
         };
     }
+
+    public async Task<User> GetById(long id)
+    {
+        var entity = await userRepository.GetById(id);
+
+        return new User
+        {
+            Id = entity.Id,
+            Email = entity.EmailAddress.Decrypt()!,
+            Name = entity.Name.Decrypt()!,
+            Role = Enum.Parse<Roles>(entity.Role.ToString())
+        };
+    }
+        
 
     private async Task ValidateNewUserRequest(RegisterUserRequest request)
     {

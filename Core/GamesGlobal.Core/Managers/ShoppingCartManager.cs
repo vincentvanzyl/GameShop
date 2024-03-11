@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Net;
+using AutoMapper;
+using GamesGlobal.Core.Exceptions;
 using GamesGlobal.Core.Repositories;
 using GamesGlobal.Dal.Entities;
 using GamesGlobal.Shared.Models;
@@ -9,12 +11,15 @@ public class ShoppingCartManager : IShoppingCartManager
 {
     private readonly IShoppingCartRepository _shoppingCartRepository;
     private readonly IShoppingCartItemRepository _shoppingCartItemRepository;
+    private readonly IGamesManager _gamesManager;
     private readonly IMapper _mapper;
 
-    public ShoppingCartManager(IShoppingCartRepository shoppingCartRepository, IShoppingCartItemRepository shoppingCartItemRepository)
+    public ShoppingCartManager(IShoppingCartRepository shoppingCartRepository, IShoppingCartItemRepository shoppingCartItemRepository, IMapper mapper, IGamesManager gamesManager)
     {
         _shoppingCartRepository = shoppingCartRepository;
         _shoppingCartItemRepository = shoppingCartItemRepository;
+        _mapper = mapper;
+        _gamesManager = gamesManager;
     }
 
     public async Task<ShoppingCart> Get(long userId)
@@ -27,18 +32,36 @@ public class ShoppingCartManager : IShoppingCartManager
         return _mapper.Map<ShoppingCart>(entity);
     }
 
-    public Task AddItem(CartItem cartItem)
+    public async Task AddItem(long userId, CartItem cartItem)
     {
-        throw new NotImplementedException();
+        var cart = await _shoppingCartRepository.GetByUserId(userId);
+
+        var entity = _mapper.Map<CartItemEntity>(cartItem);
+        entity.CartId = cart.Id;
+
+        await _shoppingCartItemRepository.Insert(entity);
     }
 
-    public Task RemoveItem(long cartItemId)
+    public async Task RemoveItem(long userId,long cartItemId)
     {
-        throw new NotImplementedException();
+        var cart = await _shoppingCartRepository.GetByUserId(userId);
+        var cartItem = await _shoppingCartItemRepository.GetById(cartItemId);
+
+        if (cart.Id != cartItem.CartId)
+            throw new ApiObjectException("Unathorzied", HttpStatusCode.Unauthorized);
+        
+        await _shoppingCartItemRepository.Delete(cartItemId);
     }
 
-    public Task SetQuantity(long cartItemId, int quantity)
+    public async Task SetQuantity(long userId, long cartItemId, int quantity)
     {
-        throw new NotImplementedException();
+        var cart = await _shoppingCartRepository.GetByUserId(userId);
+        var cartItem = await _shoppingCartItemRepository.GetById(cartItemId);
+
+        if (cart.Id != cartItem.CartId)
+            throw new ApiObjectException("Unathorzied", HttpStatusCode.Unauthorized);
+
+        cartItem.Quantity = quantity;
+        await _shoppingCartItemRepository.Update(cartItem);
     }
 }

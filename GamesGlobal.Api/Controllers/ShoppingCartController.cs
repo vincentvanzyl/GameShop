@@ -1,25 +1,25 @@
-﻿using GamesGlobal.Core.Managers;
+﻿using GamesGlobal.Api.Controllers.Base;
+using GamesGlobal.Core.Managers;
 using GamesGlobal.Shared.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamesGlobal.Api.Controllers;
 
+[Authorize]
 [Route("[controller]")]
-public class ShoppingCartController(IShoppingCartManager shoppingCartManager) : Controller
+public class ShoppingCartController(IShoppingCartManager shoppingCartManager, IUserManager userManager) : BaseController(userManager)
 {
-    private readonly IShoppingCartManager _shoppingCartManager = shoppingCartManager;
-
     [HttpGet]
-    public async Task<List<CartItem>> VIewShoppingCar()
+    public async Task<List<CartItem>> ViewShoppingCar()
     {
-        var cart = await _shoppingCartManager.Get(1);
-
+        var cart = await shoppingCartManager.Get(GetLoggedInUserId());
         return cart.CartItems;
     }
 
     [HttpPost("add")]
-    public async Task Add([FromBody] CartItem cartItem) => await _shoppingCartManager.AddItem(cartItem);
+    public async Task Add([FromBody] CartItem cartItem) => await shoppingCartManager.AddItem(GetLoggedInUserId(), cartItem);
 
     [HttpDelete("{cartItemId}")]
-    public async Task Remove([FromRoute] long cartItemId) => await _shoppingCartManager.RemoveItem(cartItemId);
+    public async Task Remove([FromRoute] long cartItemId) => await shoppingCartManager.RemoveItem(GetLoggedInUserId(), cartItemId);
 }

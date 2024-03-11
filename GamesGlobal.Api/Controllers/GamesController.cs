@@ -1,4 +1,5 @@
 ﻿using GamesGlobal.Api.Attributes;
+using GamesGlobal.Api.Controllers.Base;
 using GamesGlobal.Core.Managers;
 using GamesGlobal.Core.Repositories;
 using GamesGlobal.Shared.Models;
@@ -9,8 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace GamesGlobal.Api.Controllers;
 
 [Route($"[controller]")]
-public class GamesController(IGamesManager gamesManager) : Controller
+public class GamesController(IGamesManager gamesManager, IUserManager userManager) : BaseController(userManager)
 {
+    [Authorize]
     [HttpGet("all")]
     public async Task<List<Game>> GetAll() =>
         await gamesManager.GetAllGames();
