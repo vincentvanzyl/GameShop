@@ -25,3 +25,4 @@ GameShop using repository pattern with EF
 - Change JWT token to OAuth2
 - Add orders for converting cart on checkout
 - Game list has image byte[] stored in db and returned as base64, should upload to S3 bucket or similar storage and persist url instead
+- For new added no auth for database, more secure db authentication should be added
